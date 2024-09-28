@@ -6,15 +6,16 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
+import java.util.List;
 import java.util.stream.Stream;
 
 class TerytServiceTest {
     @ParameterizedTest
     @MethodSource("citiesCombination")
-    void test(String[] path) {
+    void test(List<String> path) {
         TerytService instance = new TerytService();
 
-        boolean actual = instance.areTerytValuesValid(path);
+        boolean actual = instance.areTerytValuesValid(path.toArray(new String[0]));
 
         Assertions.assertTrue(actual);
     }
@@ -22,10 +23,10 @@ class TerytServiceTest {
 
     private static Stream<Arguments> citiesCombination() {
         return Stream.of(
-                Arguments.of(new String[]{"DOLNOŚLĄSKIE", "WROCŁAWSKI", "SOBÓTKA"}),
-                Arguments.of(new String[]{"*", "WROCŁAWSKI", "SOBÓTKA"}),
-                Arguments.of(new String[]{"DOLNOŚLĄSKIE", "*", "SOBÓTKA"}),
-                Arguments.of(new String[]{"DOLNOŚLĄSKIE", "WROCŁAWSKI", "*"})
+                Arguments.of(List.of("DOLNOŚLĄSKIE", "WROCŁAWSKI", "SOBÓTKA")),
+                Arguments.of(List.of("*", "WROCŁAWSKI", "SOBÓTKA")),
+                Arguments.of(List.of("DOLNOŚLĄSKIE", "*", "SOBÓTKA")),
+                Arguments.of(List.of("DOLNOŚLĄSKIE", "WROCŁAWSKI", "*"))
         );
     }
 }

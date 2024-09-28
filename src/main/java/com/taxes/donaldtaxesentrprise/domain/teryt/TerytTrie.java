@@ -23,10 +23,20 @@ public class TerytTrie {
         }
     }
 
-    public boolean exist(String[] path) {
-        prepareListBeforeValidation(path);
-        Trie trie = root;
-        for (int i = 0; i < path.length; i++) {
+    public boolean exist(String[] line) {
+        prepareListBeforeValidation(line);
+        return exist(line, root, 0);
+    }
+
+    private boolean exist(String[] path, Trie trie, int j) {
+        for (int i = j; i < path.length; i++) {
+            if ("*".equals(path[i])) {
+                for (Trie child : trie.child.values()) {
+                    if (exist(path, child, i+1)) {
+                        return true;
+                    }
+                }
+            }
             if (!trie.child.containsKey(path[i])) {
                 return false;
             }
