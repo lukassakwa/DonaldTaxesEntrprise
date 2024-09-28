@@ -1,0 +1,20 @@
+<bindings version="3.0"
+          xmlns="https://jakarta.ee/xml/ns/jaxb"
+          xmlns:xs="http://www.w3.org/2001/XMLSchema"
+          xmlns:jaxb="https://jakarta.ee/xml/ns/jaxb">
+
+    <!-- Increase the Enum member size cap -->
+    <globalBindings typesafeEnumMaxMembers="512"/>
+
+    <!-- Resolve conflict for TIdentyfikatorOsobyFizycznej -->
+        <bindings schemaLocation="schema.xsd"
+                  node="//xs:complexType[@name='TIdentyfikatorOsobyFizycznej']">
+            <class name="TIdentyfikatorOsobyFizycznejLocal"/>
+        </bindings>
+
+        <!-- Resolve conflict for TIdentyfikatorOsobyNiefizycznej -->
+        <bindings schemaLocation="schema.xsd"
+                  node="//xs:complexType[@name='TIdentyfikatorOsobyNiefizycznej']">
+            <class name="TIdentyfikatorOsobyNiefizycznejLocal"/>
+        </bindings>
+</bindings>

@@ -1,0 +1,86 @@
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '3.3.4'
+    id 'io.spring.dependency-management' version '1.1.6'
+}
+
+group = 'com.taxes'
+version = '0.0.1-SNAPSHOT'
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
+}
+
+configurations {
+    xsd2java
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+
+    xsd2java "com.sun.xml.bind:jaxb-xjc:3.0.2"
+    xsd2java "com.sun.xml.bind:jaxb-impl:3.0.2"
+    xsd2java "com.sun.xml.bind:jaxb-core:3.0.2"
+    xsd2java "com.sun.activation:jakarta.activation:2.0.1"
+    xsd2java "jakarta.xml.bind:jakarta.xml.bind-api:3.0.1"
+
+    implementation "com.sun.xml.bind:jaxb-xjc:3.0.2"
+    implementation "com.sun.xml.bind:jaxb-impl:3.0.2"
+    implementation "com.sun.xml.bind:jaxb-core:3.0.2"
+    implementation "com.sun.activation:jakarta.activation:2.0.1"
+    implementation "jakarta.xml.bind:jakarta.xml.bind-api:3.0.1"
+
+
+    implementation 'javax.inject:javax.inject:1'
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+    developmentOnly 'org.springframework.boot:spring-boot-docker-compose'
+    runtimeOnly 'org.postgresql:postgresql'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+}
+
+
+def jaxbTargetDir = file("${buildDir}/generated/jaxb")
+
+task xsd2java() {
+
+    doLast {
+        jaxbTargetDir.mkdirs()
+
+        ant.taskdef(name: 'xjc', classname: 'com.sun.tools.xjc.XJCTask', classpath: configurations.xsd2java.asPath)
+        ant.jaxbTargetDir = jaxbTargetDir
+
+        ant.xjc(
+                destdir: '${jaxbTargetDir}',
+                package: 'com.taxes.donaldtaxesentrprise.domain.xml',
+                schema: 'src/main/resources/schema.xsd',
+                binding: 'src/main/resources/bindings.xjb'
+        )
+    }
+}
+
+compileJava.dependsOn xsd2java
+
+// Add the generated sources to the source set
+sourceSets {
+    main {
+        java {
+            srcDir jaxbTargetDir // Add generated directory to the source set
+        }
+    }
+}
