@@ -4,5 +4,5 @@ import com.taxes.donaldtaxesentrprise.adapter.dtos.GeneratePayloadResponse;
 import com.taxes.donaldtaxesentrprise.adapter.dtos.GeneratePyloadRequest;
 
 public interface GeneratorService {
-    GeneratePayloadResponse generateXml(GeneratePyloadRequest request);
+    GeneratePayloadResponse generateXml(GeneratePyloadRequest request) throws Exception;
 }

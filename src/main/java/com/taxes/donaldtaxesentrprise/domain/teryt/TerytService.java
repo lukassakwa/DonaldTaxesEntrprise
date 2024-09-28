@@ -6,6 +6,8 @@ import org.springframework.stereotype.Service;
 
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.stream.Collectors;
 
 import static com.taxes.donaldtaxesentrprise.domain.teryt.CsvReaderUtils.getCsvFile;
 
@@ -18,8 +20,11 @@ public class TerytService {
         updateTrieWithValues();
     }
 
-    public boolean areTerytValuesValid(String[] path) {
-        return trie.exist(path);
+    public void validate(String[] path) throws Exception {
+        if(!trie.exist(path)) {
+            String message = String.join(", ", path);
+            throw new Exception(String.format("teryt is invalid %s", message));
+        };
     }
 
     private void updateTrieWithValues() {

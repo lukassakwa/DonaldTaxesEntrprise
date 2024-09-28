@@ -6,6 +6,7 @@ import com.taxes.donaldtaxesentrprise.adapter.dtos.GenerationStatus;
 import com.taxes.donaldtaxesentrprise.adapter.dtos.generaterequest.Naglowek;
 import com.taxes.donaldtaxesentrprise.domain.file.FileService;
 import com.taxes.donaldtaxesentrprise.domain.gateway.in.GeneratorService;
+import com.taxes.donaldtaxesentrprise.domain.teryt.TerytService;
 import jakarta.xml.bind.JAXBException;
 import jakarta.xml.bind.Marshaller;
 import org.springframework.context.annotation.Scope;
@@ -26,42 +27,41 @@ public class GeneratorServiceImpl implements GeneratorService {
     private final FileService fileService;
     private final ObjectFactory objectFactory;
     private final Marshaller marshaller;
+    private final TerytService terytService;
 
-    public GeneratorServiceImpl(FileService fileService) throws JAXBException, SAXException {
+    public GeneratorServiceImpl(FileService fileService, TerytService terytService) throws JAXBException, SAXException {
         this.fileService = fileService;
+        this.terytService = terytService;
         objectFactory = new ObjectFactory();
         marshaller = MarshallerFactory.initMarshaller();
     }
 
-    public GeneratePayloadResponse generateXml(GeneratePyloadRequest request) {
+    public GeneratePayloadResponse generateXml(GeneratePyloadRequest request) throws Exception {
         final UUID uuid = UUID.randomUUID();
+
+        technicalValidation(request);
+
         try (OutputStream outputStream = fileService.getFileStream(uuid)) {
 
-
             Deklaracja deklaracja = objectFactory.createDeklaracja();
-
             deklaracja.setNaglowek(createTNaglowek(request.getNaglowek()));
-
-
-
-
             deklaracja.setPodmiot1(new Deklaracja.Podmiot1());
             deklaracja.setPozycjeSzczegolowe(new Deklaracja.PozycjeSzczegolowe());
             deklaracja.setPouczenia(BigDecimal.ZERO);
 
             marshaller.marshal(deklaracja, outputStream);
-
-        } catch (IOException | JAXBException e) {
-            return GeneratePayloadResponse.builder()
-                    .status(GenerationStatus.FAILURE)
-                    .message(e.toString())
-                    .build();
         }
 
         return GeneratePayloadResponse.builder()
                 .message(uuid.toString())
                 .status(GenerationStatus.SUCCESS)
                 .build();
+    }
+
+    private void technicalValidation(GeneratePyloadRequest request) throws Exception {
+        //TODO:: add variables
+        String[] paths = new String[]{};
+        terytService.validate(paths);
     }
 
 
