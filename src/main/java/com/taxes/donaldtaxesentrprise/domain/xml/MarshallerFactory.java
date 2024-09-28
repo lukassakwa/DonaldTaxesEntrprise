@@ -1,17 +1,13 @@
 package com.taxes.donaldtaxesentrprise.domain.xml;
 
-import com.sun.codemodel.fmt.JStaticJavaFile;
 import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBException;
 import jakarta.xml.bind.Marshaller;
-import org.apache.tomcat.util.http.fileupload.IOUtils;
-import org.springframework.core.io.Resource;
 import org.xml.sax.SAXException;
 
 import javax.xml.XMLConstants;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
-import java.io.*;
 import java.net.URL;
 
 public class MarshallerFactory {

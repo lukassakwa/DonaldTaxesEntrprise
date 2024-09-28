@@ -10,5 +10,8 @@ public class Naglowek {
     private String kodSystemowy;
     private String kodPodatku;
     private String rodzajZobowiazania;
+    private byte wariantFormularza;
+    private byte value;
+    private String poz;
     private String wersjaSchemy;
 }
