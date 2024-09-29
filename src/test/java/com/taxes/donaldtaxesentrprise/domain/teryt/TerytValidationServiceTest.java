@@ -20,10 +20,12 @@ class TerytValidationServiceTest {
 
     private static Stream<Arguments> citiesCombination() {
         return Stream.of(
-                Arguments.of(List.of("DOLNOŚLĄSKIE", "WROCŁAWSKI", "SOBÓTKA")),
-                Arguments.of(List.of("*", "WROCŁAWSKI", "SOBÓTKA")),
-                Arguments.of(List.of("DOLNOŚLĄSKIE", "*", "SOBÓTKA")),
-                Arguments.of(List.of("DOLNOŚLĄSKIE", "WROCŁAWSKI", "*"))
+                Arguments.of(List.of("DOLNOŚLĄSKIE", "WROCŁAWSKI", "SOBÓTKA"), true),
+                Arguments.of(List.of("*", "WROCŁAWSKI", "SOBÓTKA"), true),
+                Arguments.of(List.of("DOLNOŚLĄSKIE", "*", "SOBÓTKA"), true),
+                Arguments.of(List.of("DOLNOŚLĄSKIE", "WROCŁAWSKI", "*"), true),
+                Arguments.of(List.of("DOLNOŚLSKIE", "WROCŁAWSKI", "*"), false),
+                Arguments.of(List.of("DOLNOŚLSKIE", "WROŁAWSKI", "*"), false)
         );
     }
 }
