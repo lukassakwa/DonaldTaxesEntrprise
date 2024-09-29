@@ -6,6 +6,7 @@ import com.taxes.donaldtaxesentrprise.adapter.dtos.GenerationStatus;
 import com.taxes.donaldtaxesentrprise.domain.gateway.in.GeneratorService;
 import jakarta.xml.bind.JAXBException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationContext;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,7 +19,7 @@ import java.io.IOException;
 @RequestMapping("/api")
 @RequiredArgsConstructor
 public class XmlController {
-    private final Provider<GeneratorService> generatorServiceProvider;
+    private final ApplicationContext applicationContext;
 
     @PostMapping("/generate")
     ResponseEntity<GeneratePayloadResponse> generate(GeneratePyloadRequest request) {
@@ -35,6 +36,6 @@ public class XmlController {
     }
 
     private GeneratorService getGeneratorService() {
-        return generatorServiceProvider.get();
+        return applicationContext.getBean(GeneratorService.class);
     }
 }

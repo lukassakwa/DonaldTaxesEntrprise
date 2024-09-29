@@ -13,6 +13,10 @@ java {
     }
 }
 
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+}
+
 configurations {
     xsd2java
     compileOnly {
@@ -29,7 +33,6 @@ tasks.named('test') {
 }
 
 dependencies {
-    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-web'
 
     xsd2java "com.sun.xml.bind:jaxb-xjc:3.0.2"
@@ -50,7 +53,6 @@ dependencies {
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
     developmentOnly 'org.springframework.boot:spring-boot-docker-compose'
-    runtimeOnly 'org.postgresql:postgresql'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
@@ -77,11 +79,10 @@ task xsd2java() {
 
 compileJava.dependsOn xsd2java
 
-// Add the generated sources to the source set
 sourceSets {
     main {
         java {
-            srcDir jaxbTargetDir // Add generated directory to the source set
+            srcDir jaxbTargetDir
         }
     }
 }

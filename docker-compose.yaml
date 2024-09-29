@@ -1,0 +1,15 @@
+version: '3.8'
+
+services:
+  app:
+    build: .
+    container_name: donald-taxes-app
+    ports:
+      - "8083:8083"
+      - "5005:5005"
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge

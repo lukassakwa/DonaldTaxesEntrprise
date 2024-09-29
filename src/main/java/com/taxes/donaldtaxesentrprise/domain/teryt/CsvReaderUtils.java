@@ -2,14 +2,12 @@ package com.taxes.donaldtaxesentrprise.domain.teryt;
 
 import org.springframework.stereotype.Service;
 
-import java.net.URL;
+import java.io.InputStream;
 
-@Service
 public class CsvReaderUtils {
 
-    static URL getCsvFile() {
-        ClassLoader classloader = Thread.currentThread().getContextClassLoader();
-        URL resource = classloader.getResource("TERC_Adresowy_2024-09-28.csv");
+    static InputStream getCsvFile() {
+        InputStream resource = Thread.currentThread().getContextClassLoader().getResourceAsStream("teryt.csv");
         if (resource == null) {
             throw new RuntimeException("Resource not found");
         }

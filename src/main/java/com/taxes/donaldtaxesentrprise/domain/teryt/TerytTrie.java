@@ -3,15 +3,17 @@ package com.taxes.donaldtaxesentrprise.domain.teryt;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.HashMap;
+import java.util.Locale;
 
 public class TerytTrie {
     private final Trie root = new Trie();
     private final HashMap<String, String> cache = new HashMap<>();
 
+    private static final Locale locale = new Locale("pl", "PL");
 
     void addPath(String[] line) {
         String key = createKey(line);
-        cache.put(key, line[4].toUpperCase());
+        cache.put(key, line[4].toUpperCase(locale));
         Trie trie = root;
         for (int i = 2; i <= key.length(); i+=2) {
             String locutionKey = key.substring(0, i);
@@ -50,7 +52,7 @@ public class TerytTrie {
             if (StringUtils.isEmpty(path[i])) {
                 path[i] = "*";
             }
-            path[i] = path[i].toUpperCase();
+            path[i] = path[i].toUpperCase(locale);
         }
     }
 
