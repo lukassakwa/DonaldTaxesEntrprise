@@ -6,14 +6,14 @@ import com.taxes.donaldtaxesentrprise.adapter.dtos.GenerationStatus;
 import com.taxes.donaldtaxesentrprise.adapter.dtos.generaterequest.Naglowek;
 import com.taxes.donaldtaxesentrprise.domain.file.FileService;
 import com.taxes.donaldtaxesentrprise.domain.gateway.in.GeneratorService;
-import com.taxes.donaldtaxesentrprise.domain.teryt.TerytService;
+import com.taxes.donaldtaxesentrprise.domain.teryt.TerytValidationService;
+import com.taxes.donaldtaxesentrprise.domain.teryt.UrzadSkarbowyValidationService;
 import jakarta.xml.bind.JAXBException;
 import jakarta.xml.bind.Marshaller;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 import org.xml.sax.SAXException;
 
-import java.io.IOException;
 import java.io.OutputStream;
 import java.math.BigDecimal;
 import java.util.UUID;
@@ -27,11 +27,16 @@ public class GeneratorServiceImpl implements GeneratorService {
     private final FileService fileService;
     private final ObjectFactory objectFactory;
     private final Marshaller marshaller;
-    private final TerytService terytService;
+    private final TerytValidationService terytValidationService;
+    private final UrzadSkarbowyValidationService urzadSkarbowyValidationService;
 
-    public GeneratorServiceImpl(FileService fileService, TerytService terytService) throws JAXBException, SAXException {
+    public GeneratorServiceImpl(FileService fileService,
+                                TerytValidationService terytValidationService,
+                                UrzadSkarbowyValidationService urzadSkarbowyValidationService
+    ) throws JAXBException, SAXException {
         this.fileService = fileService;
-        this.terytService = terytService;
+        this.terytValidationService = terytValidationService;
+        this.urzadSkarbowyValidationService = urzadSkarbowyValidationService;
         objectFactory = new ObjectFactory();
         marshaller = MarshallerFactory.initMarshaller();
     }
@@ -59,9 +64,10 @@ public class GeneratorServiceImpl implements GeneratorService {
     }
 
     private void technicalValidation(GeneratePyloadRequest request) throws Exception {
-        //TODO:: add variables
+
         String[] paths = new String[]{};
-        terytService.validate(paths);
+        terytValidationService.validate(paths);
+        urzadSkarbowyValidationService.validate("0202");
     }
 
 

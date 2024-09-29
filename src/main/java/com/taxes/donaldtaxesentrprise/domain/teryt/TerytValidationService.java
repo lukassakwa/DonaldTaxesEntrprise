@@ -5,22 +5,18 @@ import org.springframework.stereotype.Service;
 
 import java.io.*;
 
-import static com.taxes.donaldtaxesentrprise.domain.teryt.CsvReaderUtils.getCsvFile;
+import static com.taxes.donaldtaxesentrprise.domain.teryt.ResourceUtils.getResource;
 
 @Service
-public class TerytService {
+public class TerytValidationService {
     private final TerytTrie trie;
-    private boolean initialized;
 
-    public TerytService() {
+    public TerytValidationService() {
         trie = new TerytTrie();
-        initialized = false;
+        updateTrieWithValues();
     }
 
     public void validate(String[] path) throws Exception {
-        if (!initialized) {
-            updateTrieWithValues();
-        }
         if(trie.exist(path)) {
             return;
         }
@@ -29,12 +25,11 @@ public class TerytService {
     }
 
     private void updateTrieWithValues() {
-        try (CSVReader reader = new CSVReader(new InputStreamReader(getCsvFile()), ';')) {
+        try (CSVReader reader = new CSVReader(new InputStreamReader(getResource("teryt.csv")), ';')) {
             String[] line;
             while ((line = reader.readNext()) != null && line.length > 1) {
                 trie.addPath(line);
             }
-            initialized = true;
         } catch (IOException e) {
             throw new RuntimeException();
         } finally {

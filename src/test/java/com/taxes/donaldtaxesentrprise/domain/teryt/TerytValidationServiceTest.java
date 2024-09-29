@@ -8,11 +8,11 @@ import org.junit.jupiter.params.provider.MethodSource;
 import java.util.List;
 import java.util.stream.Stream;
 
-class TerytServiceTest {
+class TerytValidationServiceTest {
     @ParameterizedTest
     @MethodSource("citiesCombination")
     void test(List<String> path) {
-        TerytService instance = new TerytService();
+        TerytValidationService instance = new TerytValidationService();
 
         Assertions.assertDoesNotThrow(() -> instance.validate(path.toArray(new String[0])));
     }

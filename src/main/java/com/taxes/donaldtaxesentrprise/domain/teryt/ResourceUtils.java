@@ -4,10 +4,10 @@ import org.springframework.stereotype.Service;
 
 import java.io.InputStream;
 
-public class CsvReaderUtils {
+public class ResourceUtils {
 
-    static InputStream getCsvFile() {
-        InputStream resource = Thread.currentThread().getContextClassLoader().getResourceAsStream("teryt.csv");
+    static InputStream getResource(String filename) {
+        InputStream resource = Thread.currentThread().getContextClassLoader().getResourceAsStream(filename);
         if (resource == null) {
             throw new RuntimeException("Resource not found");
         }
