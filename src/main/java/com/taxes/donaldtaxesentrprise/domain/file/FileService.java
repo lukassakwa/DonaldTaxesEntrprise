@@ -3,6 +3,7 @@ package com.taxes.donaldtaxesentrprise.domain.file;
 
 import jakarta.websocket.server.PathParam;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.io.InputStreamResource;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -17,6 +18,12 @@ import java.util.UUID;
 public class FileService {
 
     private static final String ROOT_PATH = "C:/declarations";
+
+
+    public InputStreamResource getInputStreamResource(UUID uuid) throws IOException {
+        Path path = Paths.get(ROOT_PATH, uuid.toString());
+        return new InputStreamResource(Files.newInputStream(getFile(path)));
+    }
 
 
     public OutputStream getFileStream(UUID uuid) throws IOException {

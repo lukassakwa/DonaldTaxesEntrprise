@@ -5,11 +5,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
-public class Podmiot {
-    private OsobaFizyczna osobaFizyczna;
-    private OsobaNieFizyczna osobaNieFizyczna;
-    private Adres adres;
-    private String rola;
+@NoArgsConstructor
+public class CelZlozenia {
+    private byte value;
+    private String poz;
 }

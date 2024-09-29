@@ -7,11 +7,9 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Naglowek {
-    private String kodSystemowy;
-    private String kodPodatku;
-    private String rodzajZobowiazania;
+    private KodFormularza kodFormularza;
     private byte wariantFormularza;
-    private byte value;
-    private String poz;
-    private String wersjaSchemy;
+    private CelZlozenia celZlozenia;
+    private NaglowekData data;
+    private String kodUrzedu;
 }

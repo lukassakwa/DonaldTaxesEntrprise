@@ -3,6 +3,7 @@ package com.taxes.donaldtaxesentrprise.domain.xml;
 import com.taxes.donaldtaxesentrprise.adapter.dtos.GeneratePayloadResponse;
 import com.taxes.donaldtaxesentrprise.adapter.dtos.GeneratePyloadRequest;
 import com.taxes.donaldtaxesentrprise.adapter.dtos.GenerationStatus;
+import com.taxes.donaldtaxesentrprise.adapter.dtos.generaterequest.Adres;
 import com.taxes.donaldtaxesentrprise.adapter.dtos.generaterequest.Naglowek;
 import com.taxes.donaldtaxesentrprise.domain.file.FileService;
 import com.taxes.donaldtaxesentrprise.domain.gateway.in.GeneratorService;
@@ -48,9 +49,11 @@ public class GeneratorServiceImpl implements GeneratorService {
 
         try (OutputStream outputStream = fileService.getFileStream(uuid)) {
 
+            //TODO:: mapstruct and map all fields
+
             Deklaracja deklaracja = objectFactory.createDeklaracja();
-            deklaracja.setNaglowek(createTNaglowek(request.getNaglowek()));
-            deklaracja.setPodmiot1(new Deklaracja.Podmiot1());
+            deklaracja.setNaglowek(GeneratorMapperUtils.createTNaglowek(request.getNaglowek()));
+            deklaracja.setPodmiot1(GeneratorMapperUtils.createPodmiot1(request.getPodmiot()));
             deklaracja.setPozycjeSzczegolowe(new Deklaracja.PozycjeSzczegolowe());
             deklaracja.setPouczenia(BigDecimal.ZERO);
 
@@ -64,26 +67,10 @@ public class GeneratorServiceImpl implements GeneratorService {
     }
 
     private void technicalValidation(GeneratePyloadRequest request) throws Exception {
-
-        String[] paths = new String[]{};
-        terytValidationService.validate(paths);
-        urzadSkarbowyValidationService.validate("0202");
+        Adres adres = request.getPodmiot().getAdres();
+        terytValidationService.validate(
+                new String[]{adres.getWojewodztwo(), adres.getPowiat(), adres.getGmina()}
+        );
+        urzadSkarbowyValidationService.validate(request.getNaglowek().getKodUrzedu());
     }
-
-
-    private TNaglowek createTNaglowek(Naglowek req) {
-        TNaglowek  naglowek = objectFactory.createTNaglowek();
-        TNaglowek.KodFormularza kodFormularza = new TNaglowek.KodFormularza();
-        kodFormularza.setValue(TKodFormularza.PCC_3);
-        kodFormularza.setKodPodatku(req.getKodPodatku());
-        kodFormularza.setKodSystemowy(req.getKodSystemowy());
-        kodFormularza.setWersjaSchemy(req.getWersjaSchemy());
-        kodFormularza.setRodzajZobowiazania(req.getRodzajZobowiazania());
-
-        naglowek.setKodFormularza(kodFormularza);
-        //naglowek.
-        //naglowek.setWariantFormularza(req.getWariantFormularza());
-        return naglowek;
-    }
-
 }

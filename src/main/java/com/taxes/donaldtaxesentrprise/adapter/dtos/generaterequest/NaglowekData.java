@@ -4,12 +4,12 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
+
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
-public class Podmiot {
-    private OsobaFizyczna osobaFizyczna;
-    private OsobaNieFizyczna osobaNieFizyczna;
-    private Adres adres;
-    private String rola;
+@NoArgsConstructor
+public class NaglowekData {
+    private LocalDate value;
+    private String poz;
 }
